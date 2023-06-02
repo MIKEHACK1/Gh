@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+
+def print_word(word):
+    print(word, end='', flush=True)
+    time.sleep(0.02)  # Ajusta el valor para cambiar la velocidad de la animación
+
+# Genera los datos para el cuadrado
+square_size = 2
+square = np.array([[0, 0], [0, square_size], [square_size, square_size], [square_size, 0], [0, 0]])
+
+# Genera los datos para el triángulo (techo de la casa)
+triangle_height = square_size
+triangle_base = square_size
+triangle = np.array([[0, square_size], [triangle_base/2, square_size + triangle_height], [triangle_base, square_size], [0, square_size]])
+
+def animate_rotation():
+    for angle in range(0, 361, 10):
+        print('\033c')  # Limpia la pantalla (funciona en la mayoría de los terminales)
+        print('\n' * 10)  # Ajusta el número de líneas para centrar la animación
+        rotated_square = np.dot(square, np.array([[np.cos(np.radians(angle)), -np.sin(np.radians(angle))], [np.sin(np.radians(angle)), np.cos(np.radians(angle))]]))
+        rotated_triangle = np.dot(triangle, np.array([[np.cos(np.radians(angle)), -np.sin(np.radians(angle))], [np.sin(np.radians(angle)), np.cos(np.radians(angle))]]))
+        for i in range(rotated_square.shape[0] - 1):
+            print_word(f'({rotated_square[i][0]:.2f},{rotated_square[i][1]:.2f}) -- ')
+        print_word(f'({rotated_square[-1][0]:.2f},{rotated_square[-1][1]:.2f})')
+        for i in range(rotated_triangle.shape[0] - 1):
+            print_word(f'({rotated_triangle[i][0]:.2f},{rotated_triangle[i][1]:.2f}) -- ')
+        print_word(f'({rotated_triangle[-1][0]:.2f},{rotated_triangle[-1][1]:.2f})')
+
+animate_rotation()
